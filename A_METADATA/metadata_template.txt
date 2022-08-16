@@ -1,0 +1,94 @@
+This metadata file was generated on %s by Alison O'Connor
+
+########################################################################################################
+GENERAL INFORMATION
+########################################################################################################
+
+1. Title of Dataset:
+%s
+
+2. Author Information
+	A. Principal Investigator Contact Information
+		Name: Alison O'Connor
+		Institution: University of Limerick
+		Address: Castletroy, Limerick, Ireland
+		Email: alison.oconnor@ul.ie
+
+	B. Associate or Co-investigator Contact Information
+		Name: Noel O'Dowd
+		Institution: University of Limerick
+		Address: Castletroy, Limerick, Ireland
+		Email: noel.odowd@ul.ie
+
+3. Date of data collection (single date, range, approximate date):
+%s
+
+4. Geographic location of data collection:
+Limerick, Ireland.
+
+5. Information about funding sources that supported the collection of the data:
+This project has received funding from the European Union's Horizon 2020 research and innovation programme under the Marie Sklodowska-Curie grant agreement No 101028291.
+
+########################################################################################################
+SHARING/ACCESS INFORMATION
+########################################################################################################
+
+1. Licenses/restrictions placed on the data:
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license.
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+2. Links to publications that cite or use the data:
+
+
+3. Links to other publicly accessible locations of the data:
+
+
+4. Links/relationships to ancillary data sets:
+
+
+5. Was data derived from another source?
+
+
+6. Recommended citation for this dataset:
+
+########################################################################################################
+DATA & FILE OVERVIEW
+########################################################################################################
+
+1. File List:
+See 'DATA SPECIFIC INFORMATION SECTION' for filelist
+
+2. Relationship between files, if important:
+
+
+3. Additional related data collected that was not included in the current data package:
+
+
+4. Are there multiple versions of the dataset?
+Yes
+GitHub repository: https://github.com/alisonoc/GTN_2D
+
+########################################################################################################
+METHODOLOGICAL INFORMATION
+########################################################################################################
+
+1. Description of methods used for collection/generation of data:
+<Include links or references to publications or other documentation containing experimental design or protocols used in data collection>
+
+2. Methods for processing the data:
+<describe how the submitted data were generated from the raw or collected data>
+
+3. Instrument- or software-specific information needed to interpret the data:
+<include full name and version of software, and any necessary packages or libraries needed to run scripts>
+
+4. Standards and calibration information, if appropriate:
+
+5. Environmental/experimental conditions:
+
+6. Describe any quality-assurance procedures performed on the data:
+
+7. People involved with sample collection, processing, analysis and/or submission:
+
+########################################################################################################
+DATA-SPECIFIC INFORMATION FOR:
+########################################################################################################

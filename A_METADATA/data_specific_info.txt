@@ -1,0 +1,9 @@
+
+%s
+
+1. Number of variables:
+
+2. Number of cases/rows:
+
+3. Variable List:
+<list variable name(s), description(s), unit(s)and value labels as appropriate for each>
