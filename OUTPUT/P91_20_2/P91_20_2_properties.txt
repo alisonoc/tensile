@@ -1,0 +1,81 @@
+{
+    "ENG_DISPLACEMENT": 1.32067,
+    "ENG_FORCE": 7.459653576,
+    "ENG_STRAIN": 0.1056536,
+    "ENG_STRESS": 593.6203701867669,
+    "RAW_DATA": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\A_RAW_DATA\\P91_20_2.csv",
+    "TRUE_STRAIN": 0.1004366533192256,
+    "TRUE_STRESS": 656.3384993303314,
+    "E": 219763.08193545786,
+    "SIGMA_Y": 312.3024134579727,
+    "SLOPE": {
+        "0.0": {
+            "Y_INTERCEPT": 656.3384993303314,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M0.csv"
+        },
+        "50.0": {
+            "Y_INTERCEPT": 651.3166666643701,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M50.csv"
+        },
+        "100.0": {
+            "Y_INTERCEPT": 646.2948339984089,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M100.csv"
+        },
+        "150.0": {
+            "Y_INTERCEPT": 641.2730013324475,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M150.csv"
+        },
+        "200.0": {
+            "Y_INTERCEPT": 636.2511686664863,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M200.csv"
+        },
+        "250.0": {
+            "Y_INTERCEPT": 631.229336000525,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M250.csv"
+        },
+        "300.0": {
+            "Y_INTERCEPT": 626.2075033345637,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M300.csv"
+        },
+        "350.0": {
+            "Y_INTERCEPT": 621.1856706686024,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M350.csv"
+        },
+        "400.0": {
+            "Y_INTERCEPT": 616.1638380026411,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M400.csv"
+        },
+        "450.0": {
+            "Y_INTERCEPT": 611.1420053366799,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M450.csv"
+        },
+        "500.0": {
+            "Y_INTERCEPT": 606.1201726707186,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M500.csv"
+        },
+        "550.0": {
+            "Y_INTERCEPT": 601.0983400047573,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M550.csv"
+        },
+        "600.0": {
+            "Y_INTERCEPT": 596.076507338796,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M600.csv"
+        },
+        "650.0": {
+            "Y_INTERCEPT": 591.0546746728347,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M650.csv"
+        },
+        "700.0": {
+            "Y_INTERCEPT": 586.0328420068735,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M700.csv"
+        },
+        "750.0": {
+            "Y_INTERCEPT": 581.0110093409122,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M750.csv"
+        },
+        "800.0": {
+            "Y_INTERCEPT": 575.9891766749508,
+            "ABAQUS_PLASTIC": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2\\ABA_M800.csv"
+        }
+    }
+}

@@ -17,9 +17,6 @@ plt.rc('font', **font)
 from B_SCR.general_functions import load_json_file, write_json_file, merge_dicts, new_dir_add_dic
 from B_SCR.material_properties import convert_fvd_engss, true_stress_strain, aoc_calc_slope
 from B_SCR.plots import eng_stress_eng_strain, plot_sec_der_peaks, plot_all_slopes
-from B_SCR.csv_functions import init_data_storage, store_data
-from B_SCR.abaqus_functions import FEA_Function
-from B_SCR.error_function import read_sim_results, split_df_by_uts, mean_abs_pe
 
 """ 
 CHECK MATERIAL ASSESSMENT IS BEING PREFORMED IN A REASONABLE WAY
@@ -71,6 +68,8 @@ for i, material in enumerate(material_list):
     max_disp, eng_stress, eng_strain, uts_dic = convert_fvd_engss(df=fvd,
                                                                   geometry=geom_dic,
                                                                   paths=path_dic)
+    # ##ADD RAW DATA PATH TO UTS DIC
+    uts_dic['RAW_DATA'] = path_dic['exp_fvd']
     # ##CALCULATE TRUE STRESS AND TRUE STRAIN FROM ENG STRESS-STRAIN
     true_strain, true_stress = true_stress_strain(eng_stress=eng_stress,
                                                   eng_strain=eng_strain)
@@ -115,6 +114,8 @@ for i, material in enumerate(material_list):
     # ##SELECT MAXIMUM YIELD VALUE AS 'BEST' VALUE
     best_key = df_dic.iloc[0].name
     best = sav_dic[best_key]
+    # ##ADD YOUNG'S MOD AND YIELD STRENGTH TO THE UTS DICTIONARY
+    uts_dic = merge_dicts(uts_dic, {'E':best['E'], 'SIGMA_Y':best['SIGMA_Y']})
     # ##PLOT THE SECOND DERIVATIVE OUTPUTS (INC MODULUS LINE)
     plot_sec_der_peaks(true_strain=true_strain,
                        true_stress=true_stress,
@@ -129,10 +130,13 @@ for i, material in enumerate(material_list):
     # ##RANGE OF SLOPES
     m_range = np.arange(0, max_slope + 50, 50)
     # ##EXTEND TRUE STRESS - TRUE STRAIN USING SLOPES
+    slope_dic={}
     for j, m in enumerate(m_range):
         # ##THE INTERCEPT IS A FUNCTION OF SIGMA TRUE UTS AND
         # ##EPSILON TRUE UTS (C = SIG_T - M*ESP_T)
         c = uts_dic['TRUE_STRESS'] - (m * uts_dic['TRUE_STRAIN'])
+        slope_dic[m]={'Y_INTERCEPT':c,
+                      'ABAQUS_PLASTIC':os.path.join(path_dic['curr_results'], 'ABA_M%s.csv' % (str(int(m))))}
         # ##SET STRAIN RANGE TO BE AT LEAST 1000 ELEMENTS IN SIZE
         estrain = np.linspace(interp_strain[-1] + 1e-4, 2, num=1000).reshape(-1, 1)
         estress = m * estrain + c
@@ -150,4 +154,7 @@ for i, material in enumerate(material_list):
         plastic.reset_index(drop=True).drop('TRUE_STRAIN', axis=1, inplace=True)
         # ##SAVE ABAQUS DATA TO CSV FILE
         plastic.to_csv(os.path.join(path_dic['curr_results'], 'ABA_M%s.csv' % (str(int(m)))), index=False)
-
+    # ##BUNDLE SLOPE DICTIONARY INTO UTS_DICTIONARY - TRACK 'M', Y_INTERCEPT AND ABAQUS PLASTIC VALUES
+    uts_dic = merge_dicts(uts_dic, {'SLOPE':slope_dic})
+    # ##WRITE UTS DIC TO JSON
+    write_json_file(dic=uts_dic, pth=path_dic['curr_results'], filename=material + '_properties.txt')

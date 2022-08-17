@@ -36,7 +36,7 @@ def convert_fvd_engss(df=None, geometry=None, paths=None):
     uts_ind = stress.argmax()
     # ##GET THE UTS AS SERIES
     uts_df = df.iloc[uts_ind]
-    new_ind=['UTS_%s'%(i) for i in uts_df.index]
+    new_ind=['ENG_%s'%(i) for i in uts_df.index]
     uts_df.index=new_ind
     uts_dic=uts_df.to_dict()
     # ##REDUCE THE ARRAYS SO THAT ONLY DATA PRIOR TO UTS IS RETURNED
