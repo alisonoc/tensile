@@ -65,9 +65,9 @@ for i, material in enumerate(material_list):
     # ##READ IN THE RAW P-DELTA DATA
     fvd = pd.read_csv(path_dic['exp_fvd'], header=[0, 1]).droplevel(level=1, axis=1)
     # ##CALCULATE ENGINEERING STRESS-STRAIN
-    max_disp, eng_stress, eng_strain, uts_dic = convert_fvd_engss(df=fvd,
-                                                                  geometry=geom_dic,
-                                                                  paths=path_dic)
+    eng_stress, eng_strain, uts_dic = convert_fvd_engss(df=fvd,
+                                                        geometry=geom_dic,
+                                                        paths=path_dic)
     # ##ADD RAW DATA PATH TO UTS DIC
     uts_dic['RAW_DATA'] = path_dic['exp_fvd']
     # ##CALCULATE TRUE STRESS AND TRUE STRAIN FROM ENG STRESS-STRAIN

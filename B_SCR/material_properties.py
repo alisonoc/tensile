@@ -39,11 +39,12 @@ def convert_fvd_engss(df=None, geometry=None, paths=None):
     new_ind=['ENG_%s'%(i) for i in uts_df.index]
     uts_df.index=new_ind
     uts_dic=uts_df.to_dict()
+    uts_dic['MAX_DISPLACEMENT'] = max_disp
     # ##REDUCE THE ARRAYS SO THAT ONLY DATA PRIOR TO UTS IS RETURNED
     stress = stress[:uts_ind+1]
     strain = strain[:uts_ind+1]
 
-    return max_disp, stress, strain, uts_dic
+    return stress, strain, uts_dic
 
 
 # Used to convert the LD Data to True Stress and Plastic Strain
