@@ -148,10 +148,10 @@ for i, material in enumerate(material_list):
         plastic = df[df['TRUE_STRESS']>=best['SIGMA_Y']].copy()
         # ##MODIFY STRAIN TO BE ZERO AT YIELD STRESS
         plastic['PLASTIC_STRAIN'] = plastic['TRUE_STRAIN'] - (plastic['TRUE_STRESS'] / best['E'])
-        # ##FIRST ROW OF DATASET HAS TO BE ZERO FOR ABAQUS SO WE WILL MANUALLY INSERT THAT
-        row = {'TRUE_STRAIN': 0.00, 'TRUE_STRESS': best['SIGMA_Y'], 'PLASTIC_STRAIN': 0.00}
-        plastic = pd.concat([pd.DataFrame(row, index=[0]), plastic])
-        plastic.reset_index(drop=True).drop('TRUE_STRAIN', axis=1, inplace=True)
+        # ##RESET STRAIN TO BE ZERO AT YIELD
+        plastic['PLASTIC_STRAIN'] = plastic['PLASTIC_STRAIN'] - plastic['PLASTIC_STRAIN'].iloc[0]
+        # ##DROP TRUE STRAIN
+        plastic.drop('TRUE_STRAIN', axis=1, inplace=True)
         # ##SAVE ABAQUS DATA TO CSV FILE
         plastic.to_csv(os.path.join(path_dic['curr_results'], 'ABA_M%s.csv' % (str(int(m)))), index=False)
     # ##BUNDLE SLOPE DICTIONARY INTO UTS_DICTIONARY - TRACK 'M', Y_INTERCEPT AND ABAQUS PLASTIC VALUES
