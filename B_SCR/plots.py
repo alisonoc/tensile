@@ -41,6 +41,37 @@ def eng_stress_eng_strain(x=None, y=None, **path_dic):
                 bbox_inches='tight')
     # plt.show()
 
+def compare_interp_true(truex=None, truey=None, interpx=None, interpy=None, kind=None, **path_dic):
+    """ PLOT THE FORCE VERSUS DISPLACEMENT
+    COMPARE EXPERIMENTAL DATA TO SIMULATED DATA.
+    WE NEED TO SHOW PERFECT MATCH UP TO UTS"""
+    fig, ax2d = plt.subplots()
+    ax = np.ravel(ax2d)
+
+    ax[0].plot(truex, truey, color='k', marker='o', label='True')
+    ax[0].plot(interpx, interpy, label='Interpolated')
+
+    # AXES LIMITS
+    ax[0].set_xlim([0, (1.1 * max(max(truex), max(interpx)))])
+    ax[0].set_ylim([0, (1.1 * max(max(truey), max(interpy)))])
+
+    # AT LEAST FIVE TICK MARKS ON X AND Y AXES
+    ax[0].xaxis.set_major_locator(plt.MaxNLocator(6))
+    ax[0].yaxis.set_major_locator(plt.MaxNLocator(6))
+    # AXES LABELS
+    ax[0].set_xlabel('True strain, mm/mm')
+    ax[0].set_ylabel('True stress, MPa')
+
+    ax[0].legend(bbox_to_anchor=(1, 0),
+                 loc='lower right',
+                 borderaxespad=0,
+                 frameon=False)
+    # save figure
+    plt.savefig(os.path.join(path_dic['curr_results'], 'TRUE_SS_%s.png'%(kind)),
+                dpi=300,
+                bbox_inches='tight')
+    # plt.show()
+
 def plot_sec_der_peaks(true_strain=None, true_stress=None,
                        interp_strain=None, interp_stress=None,
                        img_name='unnamed_image', data_dic=None,

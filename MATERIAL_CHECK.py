@@ -16,7 +16,7 @@ font={'family': 'sans-serif',
 plt.rc('font', **font)
 from B_SCR.general_functions import load_json_file, write_json_file, merge_dicts, new_dir_add_dic
 from B_SCR.material_properties import convert_fvd_engss, true_stress_strain, aoc_calc_slope
-from B_SCR.plots import eng_stress_eng_strain, plot_sec_der_peaks, plot_all_slopes
+from B_SCR.plots import eng_stress_eng_strain, plot_sec_der_peaks, compare_interp_true
 
 """ 
 CHECK MATERIAL ASSESSMENT IS BEING PREFORMED IN A REASONABLE WAY
@@ -84,13 +84,22 @@ for i, material in enumerate(material_list):
     strain_idx = np.where(true_strain <= 0.002)
     # ##DATA ARE VERY SPARSE SO WE'RE GOING TO INTERPOLATE BETWEEN EACH POINT OF THE CURVE
     # ##USING A SPLINE
-    func = interp1d(true_strain.values, true_stress.values, kind='cubic')
+    func = interp1d(true_strain.values, true_stress.values, kind='linear')
     interp_strain = np.arange(true_strain.iloc[0], true_strain.iloc[-1], 1e-4)
     interp_stress = func(interp_strain)
+    # ##COMPARE ENGINEERING WITH INTERPOLATED
+    compare_interp_true(truex=true_strain,
+                        truey=true_stress,
+                        interpx=interp_strain,
+                        interpy=interp_stress,
+                        kind=func._kind,
+                        **path_dic)
     # ##ITERATE RANGE OF WINDOW SIZES AND RETURN THE WINDOW SIZE THAT GIVES THE BEST R2 SCORE
     sav_dic={}
     for j, wl in enumerate([x for x in np.arange(11, 101, 3) if x % 2 != 0]):
+        # ##LIMIT SEC DER CALCULATION TO EARLY REGION ONLY
         sder_strain = savgol_filter(interp_strain, window_length=wl, polyorder=3, deriv=2)
+        # ##INDEX OF POINT CLOSEST TO ZERO
         zero = np.abs(sder_strain - 0.0).argmin()
         # ##CALCULATE MODULUS
         mod_strain = interp_strain[:zero].reshape(-1, 1)
@@ -105,12 +114,23 @@ for i, material in enumerate(material_list):
                            'SEC_DER':sder_strain,
                            'ZERO':zero,
                            'WINDOW_LENGTH':wl}
+    for k in sav_dic.keys():
+        # ##PLOT FOR EACH WL ANALYSIS
+        plot_sec_der_peaks(true_strain=true_strain,
+                           true_stress=true_stress,
+                           interp_strain=interp_strain,
+                           interp_stress=interp_stress,
+                           img_name='SEC_DER_%s'%(k),
+                           data_dic=sav_dic[k],
+                           **path_dic)
     # ##CREATE DF FROM DICTIONARY AND TRANSPOSE
     df_dic = pd.DataFrame(copy.deepcopy(sav_dic)).transpose()
-    # ##GET R2 WITHIN 0.1% OF MAX VALUE
-    df_dic = df_dic[df_dic['r2']>= df_dic['r2'].max()*0.99].sort_values(['r2'], ascending=False).iloc[0:3].dropna(axis=1)
+    # ##GET R2 GREATER THAN 0.9 ONLY
+    df_dic = df_dic[df_dic['r2']>=0.95]
+    df_dic['MULTI'] = df_dic['r2'] * df_dic['SIGMA_Y']
+    # df_dic = df_dic[df_dic['r2']>= df_dic['r2'].max()*0.9].sort_values(['r2'], ascending=False).iloc[0:3].dropna(axis=1)
     # ##SORT DF_DIC BY YIELD STRENGTH
-    df_dic.sort_values(['SIGMA_Y'], ascending=[False], inplace=True)
+    df_dic.sort_values(['MULTI'], ascending=[False], inplace=True)
     # ##SELECT MAXIMUM YIELD VALUE AS 'BEST' VALUE
     best_key = df_dic.iloc[0].name
     best = sav_dic[best_key]
@@ -150,6 +170,8 @@ for i, material in enumerate(material_list):
         plastic['PLASTIC_STRAIN'] = plastic['TRUE_STRAIN'] - (plastic['TRUE_STRESS'] / best['E'])
         # ##RESET STRAIN TO BE ZERO AT YIELD
         plastic['PLASTIC_STRAIN'] = plastic['PLASTIC_STRAIN'] - plastic['PLASTIC_STRAIN'].iloc[0]
+        # ##REPLACE ANY NEGATIVE STRAINS WITH VERY LOW STRAIN
+        plastic['PLASTIC_STRAIN'] = np.where(plastic['PLASTIC_STRAIN']<0, 1E-20, plastic['PLASTIC_STRAIN'])
         # ##DROP TRUE STRAIN
         plastic.drop('TRUE_STRAIN', axis=1, inplace=True)
         # ##SAVE ABAQUS DATA TO CSV FILE
@@ -158,3 +180,4 @@ for i, material in enumerate(material_list):
     uts_dic = merge_dicts(uts_dic, {'SLOPE':slope_dic})
     # ##WRITE UTS DIC TO JSON
     write_json_file(dic=uts_dic, pth=path_dic['curr_results'], filename=material + '_properties.txt')
+    plt.close('all')
