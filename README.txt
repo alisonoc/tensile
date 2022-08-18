@@ -13,8 +13,8 @@ Here the following procedure is applied:
         I. Cycle the filter window length
     B. Log all outputs in dictionary
     C. Use the dictionary to identify the most appropriate yield strength value:
-        I. Order data by R2 score (high to low)
-        II. Order data by yield strength (high to low)
+        I. R2 must exceed 0.95
+        II. Multiply yeild strength by R2 score. Sort values ascending order (high to low)
         III. Select first row (best combined R2 and yield)
 6. Plot the 'best' dictionary output
 7. Merge UTS_DIC with best dictionary
