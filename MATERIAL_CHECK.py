@@ -5,7 +5,7 @@ import copy
 import collections
 from scipy.signal import savgol_filter, find_peaks
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_percentage_error, r2_score
+from sklearn.metrics import r2_score, max_error
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (6, 6)
@@ -17,6 +17,7 @@ plt.rc('font', **font)
 from B_SCR.general_functions import load_json_file, write_json_file, merge_dicts, new_dir_add_dic
 from B_SCR.material_properties import convert_fvd_engss, true_stress_strain, aoc_calc_slope
 from B_SCR.plots import eng_stress_eng_strain, plot_sec_der_peaks, compare_interp_true
+# from B_SCR.error_function import mean_abs_pe
 
 """ 
 CHECK MATERIAL ASSESSMENT IS BEING PREFORMED IN A REASONABLE WAY
@@ -101,19 +102,24 @@ for i, material in enumerate(material_list):
         sder_strain = savgol_filter(interp_strain, window_length=wl, polyorder=3, deriv=2)
         # ##INDEX OF POINT CLOSEST TO ZERO
         zero = np.abs(sder_strain - 0.0).argmin()
-        # ##CALCULATE MODULUS
+        # ##LIMIT STRAIN AND STRESS ARRAYS TO ZERO POSITION IN SECOND DERIVATIVE (LINEAR REGION ONLY)
         mod_strain = interp_strain[:zero].reshape(-1, 1)
         mod_stress = interp_stress[:zero].reshape(-1, 1)
         if len(mod_strain) > 5:
             model = LinearRegression().fit(mod_strain, mod_stress)
             # ##GET Y PREDICTION
             prediction = model.predict(mod_strain)
+            # s = interp_stress[zero]
+            # ##CALCULATE MAPE ASSOCIATED WITH STRESSES
+            mape = max_error(mod_stress, prediction)
             sav_dic[wl] = {'E': model.coef_[0][0],
                            'SIGMA_Y':interp_stress[zero],
                            'r2': round(r2_score(mod_stress, prediction), 3),
+                           'MAPE':mape,
                            'SEC_DER':sder_strain,
                            'ZERO':zero,
                            'WINDOW_LENGTH':wl}
+    # ##OUTPUT SAV_DIC TO JSON FOR REVIEW
     for k in sav_dic.keys():
         # ##PLOT FOR EACH WL ANALYSIS
         plot_sec_der_peaks(true_strain=true_strain,
@@ -127,10 +133,13 @@ for i, material in enumerate(material_list):
     df_dic = pd.DataFrame(copy.deepcopy(sav_dic)).transpose()
     # ##GET R2 GREATER THAN 0.9 ONLY
     df_dic = df_dic[df_dic['r2']>=0.95]
-    df_dic['MULTI'] = df_dic['r2'] * df_dic['SIGMA_Y']
-    # df_dic = df_dic[df_dic['r2']>= df_dic['r2'].max()*0.9].sort_values(['r2'], ascending=False).iloc[0:3].dropna(axis=1)
+    df_dic['MULTI'] = df_dic['r2'] / (df_dic['SIGMA_Y'] * df_dic['MAPE'])
     # ##SORT DF_DIC BY YIELD STRENGTH
-    df_dic.sort_values(['MULTI'], ascending=[False], inplace=True)
+    df_dic.sort_values(['MULTI'], ascending=[True], inplace=True)
+    # ##OUTPUT THE DF FOR MANUAL CHECKS
+    df_dic.to_csv(os.path.join(path_dic['curr_results'], 'WINDOW_LENGTH.csv'),
+                  columns=[c for c in df_dic.columns if not 'SEC_DER' in c])
+    # ##GET THE TOP 3
     # ##SELECT MAXIMUM YIELD VALUE AS 'BEST' VALUE
     best_key = df_dic.iloc[0].name
     best = sav_dic[best_key]

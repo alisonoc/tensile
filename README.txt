@@ -14,8 +14,8 @@ Here the following procedure is applied:
     B. Log all outputs in dictionary
     C. Use the dictionary to identify the most appropriate yield strength value:
         I. R2 must exceed 0.95
-        II. Multiply yeild strength by R2 score. Sort values ascending order (high to low)
-        III. Select first row (best combined R2 and yield)
+        II. Calculate the relative error r2/(sigma_y*mape) for each window
+        III. Sort values by the relative error and select first row (best combined r2, yield, error)
 6. Plot the 'best' dictionary output
 7. Merge UTS_DIC with best dictionary
 8. For all potential slopes between 0 and maximimum (see point 4) in increments of 50 (we assume changes in slope of <50 MPa has negligible effect):
