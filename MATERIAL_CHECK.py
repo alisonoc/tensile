@@ -16,8 +16,7 @@ font={'family': 'sans-serif',
 plt.rc('font', **font)
 from B_SCR.general_functions import load_json_file, write_json_file, merge_dicts, new_dir_add_dic
 from B_SCR.material_properties import convert_fvd_engss, true_stress_strain, aoc_calc_slope
-from B_SCR.plots import eng_stress_eng_strain, plot_sec_der_peaks, compare_interp_true
-# from B_SCR.error_function import mean_abs_pe
+from B_SCR.plots import *
 
 """ 
 CHECK MATERIAL ASSESSMENT IS BEING PREFORMED IN A REASONABLE WAY
@@ -74,6 +73,8 @@ for i, material in enumerate(material_list):
     # ##CALCULATE TRUE STRESS AND TRUE STRAIN FROM ENG STRESS-STRAIN
     true_strain, true_stress = true_stress_strain(eng_stress=eng_stress,
                                                   eng_strain=eng_strain)
+    # ##PLOT TRUE STRESS-STRAIN
+    true_stress_true_strain(x=true_strain, y=true_stress, **path_dic)
     # ##WE KNOW LAST VALUES OF TRUE STRESS/STRAIN REPRESENT UTS
     uts_dic = merge_dicts(uts_dic, {'TRUE_STRAIN':true_strain.iloc[-1],
                                     'TRUE_STRESS':true_stress.iloc[-1]})
@@ -185,8 +186,17 @@ for i, material in enumerate(material_list):
         plastic.drop('TRUE_STRAIN', axis=1, inplace=True)
         # ##SAVE ABAQUS DATA TO CSV FILE
         plastic.to_csv(os.path.join(path_dic['curr_results'], 'ABA_M%s.csv' % (str(int(m)))), index=False)
+        # ##PLOT TRUE STRESS PLASTIC STRAIN
+        true_stress_plastic_strain(x=plastic['PLASTIC_STRAIN'], y=plastic['TRUE_STRESS'],
+                                   name='TS_EP_M%s'%(str(int(m))), **path_dic)
     # ##BUNDLE SLOPE DICTIONARY INTO UTS_DICTIONARY - TRACK 'M', Y_INTERCEPT AND ABAQUS PLASTIC VALUES
     uts_dic = merge_dicts(uts_dic, {'SLOPE':slope_dic})
     # ##WRITE UTS DIC TO JSON
     write_json_file(dic=uts_dic, pth=path_dic['curr_results'], filename=material + '_properties.txt')
+    # ## PLOT TRUE STRESS-STRAIN SHOWING EVERY 'M' PARAMETER
+    plot_all_slopes(true_strain=true_strain,
+                    true_stress=true_stress,
+                    m_range=m_range,
+                    uts_dic=uts_dic,
+                    path_dic=path_dic)
     plt.close('all')

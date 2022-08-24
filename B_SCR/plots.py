@@ -41,6 +41,77 @@ def eng_stress_eng_strain(x=None, y=None, **path_dic):
                 bbox_inches='tight')
     # plt.show()
 
+def true_stress_true_strain(x=None, y=None, **path_dic):
+    """ PLOT SINGLE CURVE OF TRUE STRESS - TRUE STRAIN
+    SHOW EXPERIMENTAL DATA CONVERSION FROM ENG TO TRUE"""
+    fig, ax2d = plt.subplots()
+    ax = np.ravel(ax2d)
+
+    ax[0].plot(x, y, color='k', marker='o', label='Experimental')
+
+    # AXES LIMITS
+    ax[0].set_xlim([0, (1.1 * max(x))])
+    ax[0].set_ylim([0, (1.1 * max(y))])
+
+    # AT LEAST FIVE TICK MARKS ON X AND Y AXES
+    ax[0].xaxis.set_major_locator(plt.MaxNLocator(6))
+    ax[0].yaxis.set_major_locator(plt.MaxNLocator(6))
+
+    # FORMAT XLABELS TO BE % RATHER THAN mm/mm
+    locs, labels = plt.xticks()
+    labels = [round(float(item) * 100, 2) for item in locs]
+    plt.xticks(locs, labels)
+
+    # AXES LABELS
+    ax[0].set_xlabel('True strain, %')
+    ax[0].set_ylabel('True stress, MPa')
+
+    ax[0].legend(bbox_to_anchor=(1, 0),
+                 loc='lower right',
+                 borderaxespad=0,
+                 frameon=False)
+    # save figure
+    plt.savefig(os.path.join(path_dic['curr_results'], 'TRUE_SS.png'),
+                dpi=300,
+                bbox_inches='tight')
+    # plt.show()
+
+
+def true_stress_plastic_strain(x=None, y=None, name=None, **path_dic):
+    """ PLOT SINGLE CUVE OF TRUE STRESS PLASTIC STRAIN
+    FOR ANY GIVEN 'M' PARAMETER """
+    fig, ax2d = plt.subplots()
+    ax = np.ravel(ax2d)
+
+    ax[0].plot(x, y, color='k', marker='o', label='Experimental')
+
+    # AXES LIMITS
+    ax[0].set_xlim([0, (1.1 * max(x))])
+    ax[0].set_ylim([0, (1.1 * max(y))])
+
+    # AT LEAST FIVE TICK MARKS ON X AND Y AXES
+    ax[0].xaxis.set_major_locator(plt.MaxNLocator(6))
+    ax[0].yaxis.set_major_locator(plt.MaxNLocator(6))
+
+    # FORMAT XLABELS TO BE % RATHER THAN mm/mm
+    locs, labels = plt.xticks()
+    labels = [round(float(item) * 100, 2) for item in locs]
+    plt.xticks(locs, labels)
+
+    # AXES LABELS
+    ax[0].set_xlabel('Plastic strain, %')
+    ax[0].set_ylabel('True stress, MPa')
+
+    ax[0].legend(bbox_to_anchor=(1, 0),
+                 loc='lower right',
+                 borderaxespad=0,
+                 frameon=False)
+    # save figure
+    plt.savefig(os.path.join(path_dic['curr_results'], name + '.png'),
+                dpi=300,
+                bbox_inches='tight')
+    # plt.show()
+
 def compare_interp_true(truex=None, truey=None, interpx=None, interpy=None, kind=None, **path_dic):
     """ PLOT THE FORCE VERSUS DISPLACEMENT
     COMPARE EXPERIMENTAL DATA TO SIMULATED DATA.
