@@ -187,8 +187,10 @@ for i, material in enumerate(material_list):
         # ##SAVE ABAQUS DATA TO CSV FILE
         plastic.to_csv(os.path.join(path_dic['curr_results'], 'ABA_M%s.csv' % (str(int(m)))), index=False)
         # ##PLOT TRUE STRESS PLASTIC STRAIN
-        true_stress_plastic_strain(x=plastic['PLASTIC_STRAIN'], y=plastic['TRUE_STRESS'],
-                                   name='TS_EP_M%s'%(str(int(m))), **path_dic)
+        true_stress_plastic_strain(x=plastic['PLASTIC_STRAIN'],
+                                   y=plastic['TRUE_STRESS'],
+                                   name='TS_EP_M%s' % (str(int(m))),
+                                   **path_dic)
     # ##BUNDLE SLOPE DICTIONARY INTO UTS_DICTIONARY - TRACK 'M', Y_INTERCEPT AND ABAQUS PLASTIC VALUES
     uts_dic = merge_dicts(uts_dic, {'SLOPE':slope_dic})
     # ##WRITE UTS DIC TO JSON

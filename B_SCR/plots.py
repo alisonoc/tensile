@@ -86,8 +86,8 @@ def true_stress_plastic_strain(x=None, y=None, name=None, **path_dic):
     ax[0].plot(x, y, color='k', marker='o', label='Experimental')
 
     # AXES LIMITS
-    ax[0].set_xlim([0, (1.1 * max(x))])
-    ax[0].set_ylim([0, (1.1 * max(y))])
+    ax[0].set_xlim([0, 2])
+    ax[0].set_ylim([0, int(1.1 * max(y))])
 
     # AT LEAST FIVE TICK MARKS ON X AND Y AXES
     ax[0].xaxis.set_major_locator(plt.MaxNLocator(6))
@@ -111,6 +111,7 @@ def true_stress_plastic_strain(x=None, y=None, name=None, **path_dic):
                 dpi=300,
                 bbox_inches='tight')
     # plt.show()
+    plt.close()
 
 def compare_interp_true(truex=None, truey=None, interpx=None, interpy=None, kind=None, **path_dic):
     """ PLOT THE FORCE VERSUS DISPLACEMENT
@@ -142,6 +143,7 @@ def compare_interp_true(truex=None, truey=None, interpx=None, interpy=None, kind
                 dpi=300,
                 bbox_inches='tight')
     # plt.show()
+    plt.close()
 
 def plot_sec_der_peaks(true_strain=None, true_stress=None,
                        interp_strain=None, interp_stress=None,
@@ -220,6 +222,7 @@ def plot_sec_der_peaks(true_strain=None, true_stress=None,
     plt.savefig(os.path.join(path_dic['curr_results'], img_name + '.png'),
                 dpi=300,
                 bbox_inches='tight')
+    plt.close()
 
 def plot_all_slopes(true_strain=None,
                     true_stress=None,
@@ -266,3 +269,4 @@ def plot_all_slopes(true_strain=None,
     plt.savefig(os.path.join(path_dic['curr_results'], 'COMPARE_SLOPES.png'),
                 dpi=300,
                 bbox_inches='tight')
+    plt.close()
