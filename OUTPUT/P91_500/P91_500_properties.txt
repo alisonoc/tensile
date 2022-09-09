@@ -7,6 +7,7 @@
     "RAW_DATA": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\A_RAW_DATA\\P91_500.csv",
     "TRUE_STRAIN": 0.041941366509603485,
     "TRUE_STRESS": 518.9129122691152,
+    "TRUE_TO_UTS": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_500\\TRUE_INTERP.csv",
     "E": 155983.83321072801,
     "SIGMA_Y": 391.1756348342469,
     "SLOPE": {

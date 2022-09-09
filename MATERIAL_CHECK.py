@@ -96,6 +96,10 @@ for i, material in enumerate(material_list):
                         interpy=interp_stress,
                         kind=func._kind,
                         **path_dic)
+    # ##EXPORT THE INTERPOLATED TRUE STRESS-STRAIN UP TO UTS POSITION AS DF
+    tdf = pd.DataFrame(columns=['TRUE_STRAIN', 'TRUE_STRESS'], data=np.stack((interp_strain, interp_stress), axis=1))
+    uts_dic['TRUE_TO_UTS'] = os.path.join(path_dic['curr_results'], 'TRUE_INTERP.csv')
+    tdf.to_csv(uts_dic['TRUE_TO_UTS'], index=False)
     # ##ITERATE RANGE OF WINDOW SIZES AND RETURN THE WINDOW SIZE THAT GIVES THE BEST R2 SCORE
     sav_dic={}
     for j, wl in enumerate([x for x in np.arange(11, 101, 3) if x % 2 != 0]):
@@ -195,6 +199,8 @@ for i, material in enumerate(material_list):
     uts_dic = merge_dicts(uts_dic, {'SLOPE':slope_dic})
     # ##WRITE UTS DIC TO JSON
     write_json_file(dic=uts_dic, pth=path_dic['curr_results'], filename=material + '_properties.txt')
+    # ##WRITE PATH DIC TO JSON
+    write_json_file(dic=path_dic, pth=path_dic['curr_results'], filename='PATH_DIC.txt')
     # ## PLOT TRUE STRESS-STRAIN SHOWING EVERY 'M' PARAMETER
     plot_all_slopes(true_strain=true_strain,
                     true_stress=true_stress,
