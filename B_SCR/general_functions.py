@@ -41,8 +41,22 @@ def read_text_file(root=os.getcwd(), filename=None):
         output = file.readlines()
         return [i.splitlines()[0] for i in output]
 
-def new_dir_add_dic(dic, key, path, dir_name, exist_ok=False):
-    """ CREATE A NEW DIRECTORY AND ADD TO PATH DICTIONARY RETURN UPDATED DICTIONARY"""
+def new_dir_add_dic(dic=None,
+                    key=None,
+                    path=None,
+                    dir_name=None,
+                    exist_ok=False):
+    """
+    CREATE A NEW DIRECTORY AND ADD TO PATH DICTIONARY RETURN UPDATED DICTIONARY
+
+    :param dic: dictionary of existing paths
+    :param key: KEY TO BE ASSIGNED TO THE NEW FOLDER
+    :param path: PATH WHERE FOLDER IS TO BE LOCATED
+    :param dir_name: NAME OF THE NEW DIRECTORY
+    :param exist_ok: OVERWRITE EXISITNG FILE? DEFAULT IS FALSE
+    :return: UPDATED DICTIONARY OF PATHS
+    """
+
     full_path = os.path.join(path, dir_name.upper())
     # ##MAKE THE DIRECTORY
     try:

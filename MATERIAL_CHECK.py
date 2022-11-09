@@ -3,20 +3,25 @@ import pandas as pd
 import numpy as np
 import copy
 import collections
+import matplotlib.pyplot as plt
+import matplotlib.style as style
 from scipy.signal import savgol_filter, find_peaks
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, max_error
 from scipy.interpolate import interp1d
-import matplotlib.pyplot as plt
-plt.rcParams["figure.figsize"] = (6, 6)
-##set font size
-font={'family': 'sans-serif',
-      'weight': 'normal',
-      'size':14}
-plt.rc('font', **font)
 from B_SCR.general_functions import load_json_file, write_json_file, merge_dicts, new_dir_add_dic
 from B_SCR.material_properties import convert_fvd_engss, true_stress_strain, aoc_calc_slope
 from B_SCR.plots import *
+import itertools
+
+marker = itertools.cycle(('s', 'v',  'o', 'd','+', '*', 'x'))
+style.use('tableau-colorblind10')
+plt.rcParams["figure.figsize"] = (6, 6)
+##set font size
+font = {'family': 'sans-serif',
+		'weight': 'normal',
+		'size': 14}
+plt.rc('font', **font)
 
 """ 
 CHECK MATERIAL ASSESSMENT IS BEING PREFORMED IN A REASONABLE WAY
@@ -85,7 +90,6 @@ for i, material in enumerate(material_list):
     # ##ASSUME YIELD STRESS CAN ONLY OCCUR PRIOR TO 0.2% STRAIN = STRAIN OF .002
     strain_idx = np.where(true_strain <= 0.002)
     # ##DATA ARE VERY SPARSE SO WE'RE GOING TO INTERPOLATE BETWEEN EACH POINT OF THE CURVE
-    # ##USING A SPLINE
     func = interp1d(true_strain.values, true_stress.values, kind='linear')
     interp_strain = np.arange(true_strain.iloc[0], true_strain.iloc[-1], 1e-4)
     interp_stress = func(interp_strain)
@@ -97,7 +101,8 @@ for i, material in enumerate(material_list):
                         kind=func._kind,
                         **path_dic)
     # ##EXPORT THE INTERPOLATED TRUE STRESS-STRAIN UP TO UTS POSITION AS DF
-    tdf = pd.DataFrame(columns=['TRUE_STRAIN', 'TRUE_STRESS'], data=np.stack((interp_strain, interp_stress), axis=1))
+    tdf = pd.DataFrame(columns=['TRUE_STRAIN', 'TRUE_STRESS'],
+                       data=np.stack((interp_strain, interp_stress), axis=1))
     uts_dic['TRUE_TO_UTS'] = os.path.join(path_dic['curr_results'], 'TRUE_INTERP.csv')
     tdf.to_csv(uts_dic['TRUE_TO_UTS'], index=False)
     # ##ITERATE RANGE OF WINDOW SIZES AND RETURN THE WINDOW SIZE THAT GIVES THE BEST R2 SCORE
@@ -114,7 +119,9 @@ for i, material in enumerate(material_list):
             model = LinearRegression().fit(mod_strain, mod_stress)
             # ##GET Y PREDICTION
             prediction = model.predict(mod_strain)
-            # s = interp_stress[zero]
+            linear = pd.DataFrame(data=np.stack((mod_strain.flatten(), mod_stress.flatten(), prediction.flatten()), axis=1),
+                                  columns=['TRUE_STRAIN', 'TRUE_STRESS', 'PRED_TRUE_STRESS'])
+            linear.to_csv(os.path.join(path_dic['curr_results'], 'LINEAR_REGION.csv'))
             # ##CALCULATE MAPE ASSOCIATED WITH STRESSES
             mape = max_error(mod_stress, prediction)
             sav_dic[wl] = {'E': model.coef_[0][0],
@@ -158,6 +165,14 @@ for i, material in enumerate(material_list):
                        img_name='SEC_DER',
                        data_dic=best,
                        **path_dic)
+    # ##PLOT THE LINEAR REGION
+    plot_linear(true_strain=true_strain,
+                true_stress=true_stress,
+                interp_strain=interp_strain,
+                interp_stress=interp_stress,
+                img_name='LINEAR',
+                data_dic=best,
+                **path_dic)
     # #################################
     # ## EXTEND DATA BEYOND UTS
     ###################################

@@ -41,6 +41,37 @@ def eng_stress_eng_strain(x=None, y=None, **path_dic):
                 bbox_inches='tight')
     # plt.show()
 
+
+def load_displacement(x=None, y=None, **path_dic):
+    """ PLOT THE FORCE VERSUS DISPLACEMENT
+    COMPARE EXPERIMENTAL DATA TO SIMULATED DATA.
+    WE NEED TO SHOW PERFECT MATCH UP TO UTS"""
+    fig, ax2d = plt.subplots()
+    ax = np.ravel(ax2d)
+
+    ax[0].plot(x, y, color='k', marker='o', label='Experimental')
+
+    # AXES LIMITS
+    ax[0].set_xlim([0, (1.1 * max(x))])
+    ax[0].set_ylim([0, (1.1 * max(y))])
+
+    # AT LEAST FIVE TICK MARKS ON X AND Y AXES
+    ax[0].xaxis.set_major_locator(plt.MaxNLocator(6))
+    ax[0].yaxis.set_major_locator(plt.MaxNLocator(6))
+    # AXES LABELS
+    ax[0].set_ylabel('Load, kN')
+    ax[0].set_xlabel('Displacement, mm')
+
+    ax[0].legend(bbox_to_anchor=(1, 0),
+                 loc='lower right',
+                 borderaxespad=0,
+                 frameon=False)
+    # save figure
+    plt.savefig(os.path.join(path_dic['curr_results'], 'P_DELTA.png'),
+                dpi=300,
+                bbox_inches='tight')
+    # plt.show()
+
 def true_stress_true_strain(x=None, y=None, **path_dic):
     """ PLOT SINGLE CURVE OF TRUE STRESS - TRUE STRAIN
     SHOW EXPERIMENTAL DATA CONVERSION FROM ENG TO TRUE"""
@@ -216,6 +247,73 @@ def plot_sec_der_peaks(true_strain=None, true_stress=None,
     ax[0].legend(mylines, labs,
                  bbox_to_anchor=(1.2, 1),
                  loc='upper left',
+                 borderaxespad=0,
+                 frameon=False)
+    # ##save figure
+    plt.savefig(os.path.join(path_dic['curr_results'], img_name + '.png'),
+                dpi=300,
+                bbox_inches='tight')
+    plt.close()
+
+
+def plot_linear(true_strain=None,
+                true_stress=None,
+                interp_strain=None,
+                interp_stress=None,
+                img_name='unnamed_image',
+                data_dic=None,
+                **path_dic):
+    # PLOT TO SHOW THE CURVE AND SECOND DERIV
+    fig, ax2d = plt.subplots()
+    ax = np.ravel(ax2d)
+    # PLOT DATA
+    p1 = ax[0].plot(interp_strain,
+                    interp_stress,
+                    marker='o',
+                    color='k',
+                    linestyle='None',
+                    label='experimental data')
+    # PLOT PEAKS
+    p2 = ax[0].plot(interp_strain[data_dic['ZERO']],
+                    interp_stress[data_dic['ZERO']],
+                    'go',
+                    label='identified yield strength')
+    p3 = ax[0].plot(interp_strain,
+                    data_dic['E']*interp_strain,
+                    label='Regression line')
+
+    # ##ADD TEXT SHOWING YIELD STRENGTH VALUE & WINDOW LENGTH
+    ax[0].text(x=0.02, y=0.9,
+               s='Yield strength: %s MPa\nWindow Length: %s\nR$^2$ score: %s'
+                 %(str(round(interp_stress[data_dic['ZERO']], 2)),
+                   str(data_dic['WINDOW_LENGTH']),
+                   str(round(data_dic['r2'], 3))),
+               horizontalalignment='left',
+               verticalalignment='center',
+               transform=ax[0].transAxes)
+
+    # AXES LIMITS
+    ax[0].set_xlim([0, 0.003])
+    ax[0].set_ylim([0, 400])
+
+    # AT LEAST FIVE TICK MARKS ON X AND Y AXES
+    ax[0].xaxis.set_major_locator(plt.MaxNLocator(6))
+    ax[0].yaxis.set_major_locator(plt.MaxNLocator(6))
+
+    # FORMAT XLABELS TO BE % RATHER THAN mm/mm
+    locs, labels = plt.xticks()
+    labels = [round(float(item) * 100, 2) for item in locs]
+    plt.xticks(locs, labels)
+
+    # AXES LABELS
+    ax[0].set_xlabel('True strain, %')
+    ax[0].set_ylabel('True stress, MPa')
+
+    mylines = p1 + p2 + p3
+    labs=[l.get_label() for l in mylines]
+    ax[0].legend(mylines, labs,
+                 bbox_to_anchor=(1, .05),
+                 loc='lower right',
                  borderaxespad=0,
                  frameon=False)
     # ##save figure
