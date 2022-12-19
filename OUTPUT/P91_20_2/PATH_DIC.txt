@@ -1,0 +1,9 @@
+{
+    "cwd": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS",
+    "project_dir": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS",
+    "raw_data": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\A_RAW_DATA",
+    "build": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\B_SCR/aba_build_nodamage.py",
+    "postp": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\B_SCR/aba_pp.py",
+    "exp_fvd": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\A_RAW_DATA\\P91_20_2.csv",
+    "curr_results": "C:\\Users\\alison.oconnor\\PycharmProjects\\MATERIAL_ANALYSIS\\OUTPUT\\P91_20_2"
+}
