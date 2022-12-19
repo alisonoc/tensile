@@ -78,6 +78,10 @@ for i, material in enumerate(material_list):
     # ##CALCULATE TRUE STRESS AND TRUE STRAIN FROM ENG STRESS-STRAIN
     true_strain, true_stress = true_stress_strain(eng_stress=eng_stress,
                                                   eng_strain=eng_strain)
+    # ##CREATE TRUE DF
+    true_df = pd.concat([true_strain, true_stress], axis=1, keys=['TRUE_STRAIN', 'TRUE_STRESS'])
+    all_df = pd.concat([fvd, true_df], axis=1)
+    all_df.to_csv(os.path.join(path_dic['curr_results'], 'DF_SS.csv'), index=False)
     # ##PLOT TRUE STRESS-STRAIN
     true_stress_true_strain(x=true_strain, y=true_stress, **path_dic)
     # ##WE KNOW LAST VALUES OF TRUE STRESS/STRAIN REPRESENT UTS
@@ -112,16 +116,16 @@ for i, material in enumerate(material_list):
         sder_strain = savgol_filter(interp_strain, window_length=wl, polyorder=3, deriv=2)
         # ##INDEX OF POINT CLOSEST TO ZERO
         zero = np.abs(sder_strain - 0.0).argmin()
-        # ##LIMIT STRAIN AND STRESS ARRAYS TO ZERO POSITION IN SECOND DERIVATIVE (LINEAR REGION ONLY)
+        # ##LIMIT STRAIN AND STRESS ARRAYS TO ZERO POSITION IN SECOND DERIVATIVE (BELOW YIELD)
         mod_strain = interp_strain[:zero].reshape(-1, 1)
         mod_stress = interp_stress[:zero].reshape(-1, 1)
         if len(mod_strain) > 5:
             model = LinearRegression().fit(mod_strain, mod_stress)
             # ##GET Y PREDICTION
             prediction = model.predict(mod_strain)
-            linear = pd.DataFrame(data=np.stack((mod_strain.flatten(), mod_stress.flatten(), prediction.flatten()), axis=1),
+            linear = pd.DataFrame(data=np.stack((mod_strain.flatten()*100, mod_stress.flatten(), prediction.flatten()), axis=1),
                                   columns=['TRUE_STRAIN', 'TRUE_STRESS', 'PRED_TRUE_STRESS'])
-            linear.to_csv(os.path.join(path_dic['curr_results'], 'LINEAR_REGION.csv'))
+            linear.to_csv(os.path.join(path_dic['curr_results'], 'LINEAR_REGION_WL%s.csv'%(wl)), index=False)
             # ##CALCULATE MAPE ASSOCIATED WITH STRESSES
             mape = max_error(mod_stress, prediction)
             sav_dic[wl] = {'E': model.coef_[0][0],
@@ -173,6 +177,19 @@ for i, material in enumerate(material_list):
                 img_name='LINEAR',
                 data_dic=best,
                 **path_dic)
+    # #################################
+    # ## PLASTIC STRAIN UP TO UTS
+    ###################################
+    odf = pd.DataFrame(data={'TRUE_STRAIN':interp_strain, 'TRUE_STRESS':interp_stress})
+    op = odf[odf['TRUE_STRESS'] >= best['SIGMA_Y']].copy()
+    # ##MODIFY STRAIN TO BE ZERO AT YIELD STRESS
+    op['PLASTIC_STRAIN'] = op['TRUE_STRAIN'] - (op['TRUE_STRESS'] / best['E'])
+    # ##RESET STRAIN TO BE ZERO AT YIELD
+    op['PLASTIC_STRAIN'] = op['PLASTIC_STRAIN'] - op['PLASTIC_STRAIN'].iloc[0]
+    # ##REPLACE ANY NEGATIVE STRAINS WITH VERY LOW STRAIN
+    op['PLASTIC_STRAIN'] = np.where(op['PLASTIC_STRAIN'] < 0, 1E-20, op['PLASTIC_STRAIN'])
+    # ##WRITE OP TO CSV
+    op.to_csv(os.path.join(path_dic['curr_results'], 'ABA_TSPE_UTS.csv'), index=False)
     # #################################
     # ## EXTEND DATA BEYOND UTS
     ###################################
