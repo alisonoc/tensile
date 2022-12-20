@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99653532-8a22-41ba-af44-f909e04dc6fb" name="Changes" comment="Update code to export linear region (Young's modulus fit) as csv for plotting in papers.">
-      <change afterPath="$PROJECT_DIR$/PAPERA_PLOTS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+    <list default="true" id="99653532-8a22-41ba-af44-f909e04dc6fb" name="Changes" comment="Update plots using PAPERA_PLOTS.py">
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MATERIAL_ANALYSIS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MATERIAL_ANALYSIS.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MATERIAL_CHECK.py" beforeDir="false" afterPath="$PROJECT_DIR$/MATERIAL_CHECK.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OUTPUT/P91_20_1/ABA_TSPE_UTS.csv" beforeDir="false" afterPath="$PROJECT_DIR$/OUTPUT/P91_20_1/ABA_TSPE_UTS.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OUTPUT/P91_500/ABA_TSPE_UTS.csv" beforeDir="false" afterPath="$PROJECT_DIR$/OUTPUT/P91_500/ABA_TSPE_UTS.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PAPERA_PLOTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/PAPERA_PLOTS.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,20 +34,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/alison.oconnor/PycharmProjects/MATERIAL_ANALYSIS/MATERIAL_CHECK.py&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/alison.oconnor/PycharmProjects/MATERIAL_ANALYSIS/MATERIAL_CHECK.py",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Python.MATERIAL_ANALYSIS">
+}]]></component>
+  <component name="RunManager" selected="Python.PAPERA_PLOTS">
     <configuration name="MATERIAL_ANALYSIS" type="PythonConfigurationType" factoryName="Python">
       <module name="MATERIAL_ANALYSIS" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -94,6 +94,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="MATERIAL_ANALYSIS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.PAPERA_PLOTS" />
       <item itemvalue="Python.MATERIAL_ANALYSIS" />
@@ -118,7 +140,8 @@
       <workItem from="1670861032989" duration="881000" />
       <workItem from="1670862435535" duration="1435000" />
       <workItem from="1670926425146" duration="330000" />
-      <workItem from="1671447010328" duration="2376000" />
+      <workItem from="1671447010328" duration="9497000" />
+      <workItem from="1671541804227" duration="3111000" />
     </task>
     <task id="LOCAL-00001" summary="Update code to export linear region (Young's modulus fit) as csv for plotting in papers.">
       <created>1668004453487</created>
@@ -127,7 +150,21 @@
       <option name="project" value="LOCAL" />
       <updated>1668004453487</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update MATERIAL_CHECK.py to export force, displacement, engineering stress, engineering strain, true stress and true strain in single CSV for plotting purposes.">
+      <created>1671453263113</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1671453263113</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Update plots using PAPERA_PLOTS.py">
+      <created>1671453294251</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1671453294251</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,26 +183,12 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update code to export linear region (Young's modulus fit) as csv for plotting in papers." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update code to export linear region (Young's modulus fit) as csv for plotting in papers." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/MATERIAL_CHECK.py</url>
-          <line>85</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/MATERIAL_CHECK.py</url>
-          <line>82</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Update MATERIAL_CHECK.py to export force, displacement, engineering stress, engineering strain, true stress and true strain in single CSV for plotting purposes." />
+    <MESSAGE value="Update plots using PAPERA_PLOTS.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update plots using PAPERA_PLOTS.py" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/MATERIAL_ANALYSIS$PAPERA_PLOTS.coverage" NAME="PAPERA_PLOTS Coverage Results" MODIFIED="1670868960153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/MATERIAL_ANALYSIS$MATERIAL_ANALYSIS.coverage" NAME="MATERIAL_ANALYSIS Coverage Results" MODIFIED="1671452884909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MATERIAL_ANALYSIS$PAPERA_PLOTS.coverage" NAME="PAPERA_PLOTS Coverage Results" MODIFIED="1671544933277" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MATERIAL_ANALYSIS$MATERIAL_ANALYSIS.coverage" NAME="MATERIAL_ANALYSIS Coverage Results" MODIFIED="1671453932298" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -375,7 +375,8 @@ def plastic_strain_extended(material=None,
 				dpi=300,
 				bbox_inches='tight')
 
-def general_eng_ss():
+def general_eng_ss(res_pth=None,
+				   marker_dic=None):
 	"""
 	This creates a basic diagram of engineering stress-strain
 	for CS graduates who may not understand material behaviour
@@ -388,57 +389,173 @@ def general_eng_ss():
 	max_y = 0
 	max_x = 0
 
-	# ##FOR EACH MATERIAL GET THE PATH TO RESULTS AND PLOT DATA
-	for m in material:
-		# ##READ IN THE PROPERTIES OF THE MATERIAL
-		dic = load_json_file(os.path.join(res_pth['RES_%s' % (m)], '%s_properties.txt' % (m)))
-		# ##USING PATH DIC FIND GET RELEVANT DATA
-		exp_df = pd.read_csv(res_pth['RAW_%s' % (m)], header=[0, 1])
-		exp_df = exp_df.droplevel(level=1, axis=1)
-		# ##GET MAX FORCE AND MAX DISPLACEMENT
-		mf = exp_df['FORCE'].max()
-		md = exp_df['DISPLACEMENT'].max()
-		if mf > max_y:
-			max_y = mf
-		if md > max_x:
-			max_x = md
-		# ##PLOT DATA
-		ax[0].plot(exp_df['DISPLACEMENT'],
-				   exp_df['FORCE'],
-				   marker=marker_dic[m]['marker'],
-				   mfc='none',
-				   markevery=0.05,
-				   color='k',
-				   label='Dataset %s' % (marker_dic[m]['number']))
-		# ##PLOT DATA
-		ax[0].plot(exp_df['DISPLACEMENT'],
-				   exp_df['FORCE'],
-				   marker=marker_dic[m]['marker'],
-				   mfc='none',
-				   markevery=[0, -1],
-				   color='k')
-		# ## PLOT YIELD POSITION
-		my_yield = exp_df[exp_df['']]
-		ax[0].scatter(dic['SIGMA_YIELD'])
+	# ##READ IN THE PROPERTIES OF THE MATERIAL
+	dic = {'SIGMA_Y':200,
+		   'EPS_Y':0.037,
+		   'UTS': 301,
+		   'EPS_UTS':0.25,
+		   'EPS_F':0.435}
+	# ##READ IN DATA
+	exp_df = pd.read_csv(os.path.join(os.path.join(res_pth['cwd'], 'OUTPUT'), 'GENERAL_SS.csv'))
+	# ##GET MAX FORCE AND MAX DISPLACEMENT
+	mf = exp_df['STRESS'].max()
+	md = exp_df['STRAIN'].max()
+	if mf > max_y:
+		max_y = mf * 1.05
+	if md > max_x:
+		max_x = md * 1.05
+	# ##PLOT DATA
+	ax[0].plot(exp_df['STRAIN'],
+			   exp_df['STRESS'],
+			   mfc='none',
+			   markevery=0.05,
+			   color='k',
+			   label='Data')
+	# ##PLOT DATA
+	ax[0].plot(exp_df['STRAIN'],
+			   exp_df['STRESS'],
+			   mfc='none',
+			   markevery=[0, -1],
+			   color='k')
+	# ## PLOT YIELD POSITION
+	ax[0].scatter(dic['EPS_Y'],
+				  dic['SIGMA_Y'],
+				  marker='o',
+				  color='b',
+				  s=75,
+				  label='$\sigma_y$')
+	# ##PLOT UTS POSITION
+	ax[0].scatter(dic['EPS_UTS'],
+				  dic['UTS'],
+				  marker='^',
+				  color='b',
+				  s=75,
+				  label='$\sigma_{UTS}$')
+	# ##ADD ANNOTATIONS
+	# ##YOUNGS MODULUS
+	byield = exp_df[exp_df['STRESS']<=dic['SIGMA_Y']].drop(labels=[exp_df.index[-1]], axis=0)
+	# ##VLINE, YOUNGS
+	ax[0].vlines(x=byield.iloc[-1]['STRAIN'],
+				  ymin=byield.iloc[-3]['STRESS'],
+				  ymax=byield.iloc[-1]['STRESS'])
+	# ##HLINE, YOUNGS
+	ax[0].hlines(y=byield.iloc[-3]['STRESS'],
+				  xmax=byield.iloc[-3]['STRAIN'],
+				  xmin=dic['EPS_Y'])
+	text_x0 = ((dic['EPS_Y'] - byield.iloc[-3]['STRAIN']) / 2) + byield.iloc[-3]['STRAIN']
+	text_y0 = byield.iloc[-3]['STRESS'] * 0.85
+	text_x1 = byield.iloc[-1]['STRAIN'] * 1.25
+	text_y1 = ((byield.iloc[-1]['STRESS'] - byield.iloc[-3]['STRESS']) /2 ) + (byield.iloc[-3]['STRESS'] * 0.85)
+	ax[0].annotate('1', xy=(text_x0, text_y0), horizontalalignment='center')
+	ax[0].annotate('E', xy=(text_x1, text_y1), horizontalalignment='center', verticalalignment='center')
 
-	# AXES LABELS
-	ax[0].set_xlabel('Plastic strain, %')
-	ax[0].set_ylabel('True stress, MPa')
+	# ##STRAIN HARDENING REGION
+	sh = exp_df[(exp_df['STRESS']>=dic['SIGMA_Y']) & (exp_df['STRESS']<=dic['UTS']) & (exp_df['STRAIN']<=dic['EPS_UTS'])]
+	ax[0].plot(sh['STRAIN'],
+			   sh['STRESS'],
+			   color='g',
+			   linewidth=10,
+			   alpha=0.4,
+			   label='Strain hardening region')
+	# ##DAMAGE REGION
+	damage = exp_df[(exp_df['STRAIN'] >= dic['EPS_UTS'])].iloc[0:-2]
+	ax[0].plot(damage['STRAIN'],
+			   damage['STRESS'],
+			   color='r',
+			   linewidth=10,
+			   alpha=0.4,
+			   label='Material damage region')
+
+	# ##AXES LABELS
+	ax[0].set_xlabel('Strain')
+	ax[0].set_ylabel('Stress')
+	# ##AXES LIMITS
+	ax[0].set_xlim([0, max_x])
+	ax[0].set_ylim([0, max_y])
 	# ##AXES TICKS(EMPTY)
 	ax[0].set_xticks([])
 	ax[0].set_yticks([])
 
 	# ##LEGEND
-	ax[0].legend(bbox_to_anchor=(0.00, 1),
-				 loc='upper left',
+	ax[0].legend(bbox_to_anchor=(0.95, 0),
+				 loc='lower right',
 				 ncol=1,
 				 borderaxespad=0,
 				 frameon=False)
 	# ##TURN ON MINOR TICKS
-	plt.minorticks_on()
-	### save figure
+	plt.minorticks_off()
+	# ## save figure
 	plt.savefig(os.path.join(res_pth['PAPERA_PLOTS'],
 							 'DIAGRAM_ENG_SS.png'),
+				dpi=300,
+				bbox_inches='tight')
+
+
+def general_true_ss(res_pth=None,
+				   marker_dic=None):
+	"""
+	This creates a basic diagram of engineering stress-strain
+	for CS graduates who may not understand material behaviour
+	:return:
+	"""
+
+	fig, ax2d = plt.subplots()
+	ax = np.ravel(ax2d)
+	# ##INITIAL MAXIMUM AS ZERO THESE WILL BE ITERATED TO BE THE GREATEST X,Y IN ANY OF THE RESULTS
+	max_y = 0
+	max_x = 0
+
+	# ##READ IN THE PROPERTIES OF THE MATERIAL
+	dic = {'SIGMA_Y':200,
+		   'EPS_Y':0.037,
+		   'UTS': 301,
+		   'EPS_UTS':0.25,
+		   'EPS_F':0.435}
+	# ##READ IN DATA
+	exp_df = pd.read_csv(os.path.join(os.path.join(res_pth['cwd'], 'OUTPUT'), 'GENERAL_SS.csv'))
+	# ##GET MAX FORCE AND MAX DISPLACEMENT
+	mf = exp_df['STRESS'].max()
+	md = exp_df['STRAIN'].max()
+	if mf > max_y:
+		max_y = mf * 1.05
+	if md > max_x:
+		max_x = md * 1.05
+	# ##PLOT DATA
+	ax[0].plot(exp_df['STRAIN'],
+			   exp_df['STRESS'],
+			   mfc='none',
+			   markevery=0.05,
+			   color='k',
+			   label='With damage')
+	# ##PLOT DATA
+	ax[0].plot(exp_df['TRUE_STRAIN'],
+			   exp_df['TRUE_STRESS'],
+			   color='k',
+			   linestyle='--',
+			   label='No damage')
+
+
+	# ##AXES LABELS
+	ax[0].set_xlabel('True strain')
+	ax[0].set_ylabel('True stress')
+	# ##AXES LIMITS
+	ax[0].set_xlim([0, max_x])
+	ax[0].set_ylim([0, max_y])
+	# ##AXES TICKS(EMPTY)
+	ax[0].set_xticks([])
+	ax[0].set_yticks([])
+
+	# ##LEGEND
+	ax[0].legend(bbox_to_anchor=(0.95, 0),
+				 loc='lower right',
+				 ncol=1,
+				 borderaxespad=0,
+				 frameon=False)
+	# ##TURN ON MINOR TICKS
+	plt.minorticks_off()
+	# ## save figure
+	plt.savefig(os.path.join(res_pth['PAPERA_PLOTS'],
+							 'DIAGRAM_TRUE_SS.png'),
 				dpi=300,
 				bbox_inches='tight')
 
@@ -453,8 +570,8 @@ pdic['cwd'] = os.getcwd()
 for r, d, f in os.walk(pdic['cwd']):
 	if 'OUTPUT' in r:
 		for material in materials:
-			pdic['RES_%s' % (material)] = os.path.join(pdic['cwd'], 'OUTPUT/%s') % (material)
-			pdic['RAW_%s' % (material)] = os.path.join(pdic['cwd'], 'A_RAW_DATA/%s.csv' % (material))
+			pdic['RES_%s' % (material)] = os.path.join(pdic['cwd'], 'OUTPUT\\%s') % (material)
+			pdic['RAW_%s' % (material)] = os.path.join(pdic['cwd'], 'A_RAW_DATA\\%s.csv' % (material))
 # ##CREATE DIRECTORY FOR PAPER_PLOTS
 pdic = new_dir_add_dic(dic=pdic,
 					   key='PAPERA_PLOTS',
@@ -483,17 +600,21 @@ for material in materials:
 	marker_dic[material] = {'marker': mm, 'number': mynum}
 # ##SORT MARKER DICTIONARY BY NUMBER RETURN LIST OF MATERIALS IN ORDER OF NUMBER
 order = sorted(marker_dic, key=lambda x: marker_dic[x]['number'])
-# ## PLOT ALL EXPERIMENTAL FORCE-DISPLACEMENT
-experimental_results(material=order,
-					 res_pth=pdic,
-					 marker_dic=marker_dic)
-# ##PLOT ALL TRUE STRESS-STRAIN
-true_stress_strain(material=order,
-				   res_pth=pdic,
-				   marker_dic=marker_dic)
-second_derivative(material=order,
-				  res_pth=pdic,
-				  marker_dic=marker_dic)
-plastic_strain_extended(material=order,
-						res_pth=pdic,
-						marker_dic=marker_dic)
+# ##PLOT GENERAL ILLUSTRATIVE DIAGRAMS
+general_eng_ss(res_pth=pdic,
+			   marker_dic=marker_dic)
+general_true_ss(res_pth=pdic, marker_dic=marker_dic)
+# # ## PLOT ALL EXPERIMENTAL FORCE-DISPLACEMENT
+# experimental_results(material=order,
+# 					 res_pth=pdic,
+# 					 marker_dic=marker_dic)
+# # ##PLOT ALL TRUE STRESS-STRAIN
+# true_stress_strain(material=order,
+# 				   res_pth=pdic,
+# 				   marker_dic=marker_dic)
+# second_derivative(material=order,
+# 				  res_pth=pdic,
+# 				  marker_dic=marker_dic)
+# plastic_strain_extended(material=order,
+# 						res_pth=pdic,
+# 						marker_dic=marker_dic)
