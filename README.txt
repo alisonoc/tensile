@@ -1,5 +1,3 @@
-This project was archived on 7/3/23 by AOC. The data generated with this code was used in project 'PAPERA' and 'A-ML-Approach-to-Automate-Ductile-Damage-Parameter-Selection-in-FE-Simulations', these projects were used to write a journal article that was submitted to the Int. Journal of Mechanics A/Solids (ESCM special edition).
-
 The purpose of this module is to analyse material properties that are planned for use in bayesian optimisation sections.
 
 Here the following procedure is applied:
