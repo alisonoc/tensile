@@ -40,6 +40,7 @@ def eng_stress_eng_strain(x=None, y=None, **path_dic):
                 dpi=300,
                 bbox_inches='tight')
     # plt.show()
+    plt.close()
 
 
 def load_displacement(x=None, y=None, **path_dic):
@@ -71,6 +72,7 @@ def load_displacement(x=None, y=None, **path_dic):
                 dpi=300,
                 bbox_inches='tight')
     # plt.show()
+    plt.close()
 
 def true_stress_true_strain(x=None, y=None, **path_dic):
     """ PLOT SINGLE CURVE OF TRUE STRESS - TRUE STRAIN
@@ -102,10 +104,13 @@ def true_stress_true_strain(x=None, y=None, **path_dic):
                  borderaxespad=0,
                  frameon=False)
     # save figure
-    plt.savefig(os.path.join(path_dic['curr_results'], 'TRUE_SS.png'),
+    plot_path  = os.path.join(path_dic['curr_results'], 'TRUE_SS.png')
+    plt.savefig(plot_path,
                 dpi=300,
                 bbox_inches='tight')
     # plt.show()
+    plt.close()
+    return plot_path
 
 
 def true_stress_plastic_strain(x=None, y=None, name=None, **path_dic):
@@ -170,11 +175,13 @@ def compare_interp_true(truex=None, truey=None, interpx=None, interpy=None, kind
                  borderaxespad=0,
                  frameon=False)
     # save figure
-    plt.savefig(os.path.join(path_dic['curr_results'], 'TRUE_SS_%s.png'%(kind)),
+    path_file = os.path.join(path_dic['curr_results'], 'TRUE_SS_%s.png'%(kind))
+    plt.savefig(path_file,
                 dpi=300,
                 bbox_inches='tight')
     # plt.show()
     plt.close()
+    return path_file
 
 def plot_sec_der_peaks(true_strain=None, true_stress=None,
                        interp_strain=None, interp_stress=None,
@@ -250,10 +257,12 @@ def plot_sec_der_peaks(true_strain=None, true_stress=None,
                  borderaxespad=0,
                  frameon=False)
     # ##save figure
-    plt.savefig(os.path.join(path_dic['curr_results'], img_name + '.png'),
+    path_file = os.path.join(path_dic['curr_results'], img_name + '.png')
+    plt.savefig(path_file,
                 dpi=300,
                 bbox_inches='tight')
     plt.close()
+    return path_file
 
 
 def plot_linear(true_strain=None,
@@ -317,10 +326,12 @@ def plot_linear(true_strain=None,
                  borderaxespad=0,
                  frameon=False)
     # ##save figure
-    plt.savefig(os.path.join(path_dic['curr_results'], img_name + '.png'),
+    path_file = os.path.join(path_dic['curr_results'], img_name + '.png')
+    plt.savefig(path_file,
                 dpi=300,
                 bbox_inches='tight')
     plt.close()
+    return path_file
 
 def plot_all_slopes(true_strain=None,
                     true_stress=None,
@@ -364,7 +375,9 @@ def plot_all_slopes(true_strain=None,
                  borderaxespad=0,
                  frameon=False)
     # ##save figure
-    plt.savefig(os.path.join(path_dic['curr_results'], 'COMPARE_SLOPES.png'),
+    compare_plot_path = os.path.join(path_dic['curr_results'], 'COMPARE_SLOPES.png')
+    plt.savefig(compare_plot_path,
                 dpi=300,
                 bbox_inches='tight')
     plt.close()
+    return compare_plot_path
