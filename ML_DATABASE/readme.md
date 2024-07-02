@@ -1,6 +1,6 @@
 # Database of bayesian optimisation results for material P91_20_1 
 
-## Experimental data: 
+## Experimental data: sdf
 EXP_EXTRAP.csv: Displacement versus load for the physical experimental test (curve against which FEA data are compared)
 
 ## FEA data:
